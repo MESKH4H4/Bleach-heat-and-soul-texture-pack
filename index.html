@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bleach: Heat the Soul HD - Comparison Hub</title>
+    
+    <!-- Slider Component -->
+    <script defer src="https://unpkg.com/img-comparison-slider@7/dist/index.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/img-comparison-slider@7/dist/styles.css" />
+
+    <style>
+        :root {
+            --bleach-orange: #ff9900;
+            --spiritual-blue: #00d4ff;
+            --shinigami-black: #0a0a0a;
+            --hollow-white: #f5f5f5;
+            --card-bg: #161616;
+            --text-gray: #aaa;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--shinigami-black); 
+            color: var(--hollow-white); 
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Background com um leve degradê espiritual */
+            background-image: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .container { max-width: 1100px; width: 100%; text-align: center; }
+
+        header { 
+            padding: 40px 0; 
+            margin-bottom: 30px; 
+            border-bottom: 3px solid var(--bleach-orange);
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 30%;
+            height: 3px;
+            background: var(--spiritual-blue);
+        }
+        
+        h1 { 
+            color: var(--hollow-white); 
+            margin: 0; 
+            font-size: 2.8rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            font-style: italic;
+            text-shadow: 3px 3px 0px var(--bleach-orange);
+        }
+        
+        .category-menu {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .btn-cat {
+            background: transparent;
+            border: 2px solid #333;
+            color: var(--hollow-white);
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 0px; /* Estilo mais seco/afiado como uma Zanpakuto */
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-cat.active {
+            border-color: var(--bleach-orange);
+            background: var(--bleach-orange);
+            color: black;
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.4);
+        }
+
+        .image-selector {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-img {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #444;
+            background: #1a1a1a;
+            color: var(--hollow-white);
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            /* Corte diagonal para parecer um corte de espada */
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+
+        .btn-img.active {
+            background: var(--spiritual-blue);
+            border-color: var(--spiritual-blue);
+            color: black;
+            transform: translateY(-5px);
+        }
+
+        .comparison-area {
+            background: var(--card-bg);
+            padding: 10px;
+            border: 1px solid #333;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        img-comparison-slider {
+            width: 100%;
+            --divider-color: var(--bleach-orange);
+            --default-handle-color: var(--bleach-orange);
+            outline: none;
+        }
+
+        img-comparison-slider img {
+            width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .label-box {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            font-weight: bold;
+            color: var(--bleach-orange);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        footer { 
+            margin-top: 60px; 
+            padding: 20px;
+            color: var(--text-gray); 
+            font-size: 0.8rem;
+            border-top: 1px solid #222;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Bleach: Heat the Soul HD</h1>
+            <p style="color: var(--spiritual-blue); text-transform: uppercase; font-size: 0.9rem; font-weight: bold;">Texture Pack Comparison</p>
+        </header>
+
+        <div class="category-menu">
+            <button class="btn-cat active" onclick="setCategory('psp_vs_hd', this)">PSP vs HD Standard</button>
+            <button class="btn-cat" onclick="setCategory('hd_vs_vivid', this)">Standard vs Vivid</button>
+        </div>
+
+        <div class="image-selector" id="imgSelector"></div>
+
+        <div class="comparison-area">
+            <div class="label-box">
+                <span id="label-left">Original</span>
+                <span id="label-right">HD</span>
+            </div>
+            
+            <img-comparison-slider id="slider">
+                <img slot="first" id="img-before" src="" />
+                <img slot="second" id="img-after" src="" />
+            </img-comparison-slider>
+        </div>
+
+        <footer>
+            BANKAI RE-TEXTURE PROJECT BY MESKH4H4 | 2026
+        </footer>
+    </div>
+
+    <script>
+        // Ajuste esta URL para a pasta correta do seu novo repositório do Bleach
+        const baseUrl = "https://github.com/MESKH4H4/Bleach-heat-and-soul-texture-pack/comparacoes";
+        
+        let currentCategory = 'psp_vs_hd';
+        let currentIndex = 0;
+
+        /* 
+           ESTRUTURA DE PASTAS SUGERIDA:
+           /comparacoes/PSP/psp-0.png
+           /comparacoes/HD/hd-0.png
+           /comparacoes/VIVID/vivid-0.png
+        */
+        const configs = {
+            'psp_vs_hd': {
+                leftDir: 'PSP/psp',
+                rightDir: 'HD/hd',
+                labelL: 'PSP Original',
+                labelR: 'HD Texture Pack'
+            },
+            'hd_vs_vivid': {
+                leftDir: 'HD/hd',
+                rightDir: 'VIVID/vivid',
+                labelL: 'HD Standard',
+                labelR: 'HD Vivid Colors'
+            }
+        };
+
+        function initSelector() {
+            const selector = document.getElementById('imgSelector');
+            selector.innerHTML = '';
+            // Ajuste o "i <= 7" para o número de imagens que você tiver
+            for (let i = 0; i <= 7; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = 'btn-img' + (i === currentIndex ? ' active' : '');
+                btn.onclick = () => setIndex(i, btn);
+                selector.appendChild(btn);
+            }
+        }
+
+        function setCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.btn-cat').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateImages();
+        }
+
+        function setIndex(idx, btn) {
+            currentIndex = idx;
+            document.querySelectorAll('.btn-img').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateImages();
+        }
+
+        function updateImages() {
+            const config = configs[currentCategory];
+            const imgBefore = document.getElementById('img-before');
+            const imgAfter = document.getElementById('img-after');
+            
+            const cacheBuster = `?t=${new Date().getTime()}`;
+            
+            // Montagem do caminho: baseUrl + / + diretorio/prefixo + - + index + .png
+            const newSrcBefore = `${baseUrl}/${config.leftDir}-${currentIndex}.png${cacheBuster}`;
+            const newSrcAfter = `${baseUrl}/${config.rightDir}-${currentIndex}.png${cacheBuster}`;
+
+            imgBefore.src = newSrcBefore;
+            imgAfter.src = newSrcAfter;
+
+            document.getElementById('label-left').innerText = config.labelL;
+            document.getElementById('label-right').innerText = config.labelR;
+        }
+
+        initSelector();
+        updateImages();
+    </script>
+</body>
+</html>
